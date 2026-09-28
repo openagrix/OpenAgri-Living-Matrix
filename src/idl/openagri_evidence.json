@@ -1,0 +1,141 @@
+{
+  "address": "2pcucTtxUGkNidFi48ioK8oLaUSCcMH3QEabA8QasGsL",
+  "metadata": {
+    "name": "openagri_evidence",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "address": "2pcucTtxUGkNidFi48ioK8oLaUSCcMH3QEabA8QasGsL"
+  },
+  "instructions": [
+    {
+      "name": "initializeFarm",
+      "discriminator": [252,28,185,172,244,74,117,165],
+      "accounts": [
+        { "name": "farmProfile", "writable": true },
+        { "name": "owner", "writable": true, "signer": true },
+        { "name": "systemProgram" }
+      ],
+      "args": [
+        { "name": "farmId", "type": "string" },
+        { "name": "name", "type": "string" },
+        { "name": "location", "type": "string" },
+        { "name": "cropTypes", "type": "string" },
+        { "name": "areaM2", "type": "u32" }
+      ]
+    },
+    {
+      "name": "submitEvidence",
+      "discriminator": [12,169,228,194,229,31,44,39],
+      "accounts": [
+        { "name": "evidenceRecord", "writable": true },
+        { "name": "farmProfile", "writable": true },
+        { "name": "submitter", "writable": true, "signer": true },
+        { "name": "systemProgram" }
+      ],
+      "args": [
+        { "name": "nextSequence", "type": "u32" },
+        { "name": "evidenceType", "type": { "defined": { "name": "EvidenceType" } } },
+        { "name": "dataHash", "type": { "array": ["u8", 32] } },
+        { "name": "ipfsCid", "type": "string" },
+        { "name": "summary", "type": "string" },
+        { "name": "quantity", "type": "u64" },
+        { "name": "unit", "type": "string" },
+        { "name": "eventTimestamp", "type": "i64" }
+      ]
+    },
+    {
+      "name": "updateFarm",
+      "discriminator": [94,37,19,249,121,53,154,189],
+      "accounts": [
+        { "name": "farmProfile", "writable": true },
+        { "name": "owner", "signer": true }
+      ],
+      "args": [
+        { "name": "name", "type": { "option": "string" } },
+        { "name": "location", "type": { "option": "string" } },
+        { "name": "cropTypes", "type": { "option": "string" } },
+        { "name": "areaM2", "type": { "option": "u32" } }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "FarmProfile",
+      "discriminator": [97,227,235,68,114,146,56,202]
+    },
+    {
+      "name": "EvidenceRecord",
+      "discriminator": [221,242,76,137,184,94,80,225]
+    }
+  ],
+  "types": [
+    {
+      "name": "FarmProfile",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          { "name": "owner", "type": "pubkey" },
+          { "name": "farmId", "type": "string" },
+          { "name": "name", "type": "string" },
+          { "name": "location", "type": "string" },
+          { "name": "cropTypes", "type": "string" },
+          { "name": "areaM2", "type": "u32" },
+          { "name": "createdAt", "type": "i64" },
+          { "name": "evidenceCount", "type": "u32" },
+          { "name": "bump", "type": "u8" }
+        ]
+      }
+    },
+    {
+      "name": "EvidenceRecord",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          { "name": "farm", "type": "pubkey" },
+          { "name": "submitter", "type": "pubkey" },
+          { "name": "evidenceType", "type": { "defined": { "name": "EvidenceType" } } },
+          { "name": "dataHash", "type": { "array": ["u8", 32] } },
+          { "name": "ipfsCid", "type": "string" },
+          { "name": "summary", "type": "string" },
+          { "name": "quantity", "type": "u64" },
+          { "name": "unit", "type": "string" },
+          { "name": "eventTimestamp", "type": "i64" },
+          { "name": "submittedAt", "type": "i64" },
+          { "name": "sequence", "type": "u32" },
+          { "name": "bump", "type": "u8" }
+        ]
+      }
+    },
+    {
+      "name": "EvidenceType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          { "name": "Harvest" },
+          { "name": "Soil" },
+          { "name": "Carbon" },
+          { "name": "Water" },
+          { "name": "Biodiversity" },
+          { "name": "HoneyQuality" },
+          { "name": "ProduceQuality" }
+        ]
+      }
+    }
+  ],
+  "errors": [
+    { "code": 6000, "name": "FarmIdTooLong", "msg": "Farm ID must be 20 characters or fewer" },
+    { "code": 6001, "name": "NameTooLong", "msg": "Farm name must be 100 characters or fewer" },
+    { "code": 6002, "name": "NameEmpty", "msg": "Farm name cannot be empty" },
+    { "code": 6003, "name": "LocationTooLong", "msg": "Location must be 150 characters or fewer" },
+    { "code": 6004, "name": "CropTypesTooLong", "msg": "Crop types must be 100 characters or fewer" },
+    { "code": 6005, "name": "InvalidArea", "msg": "Farm area must be greater than zero" },
+    { "code": 6006, "name": "IpfsCidTooLong", "msg": "IPFS CID must be 60 characters or fewer" },
+    { "code": 6007, "name": "SummaryTooLong", "msg": "Summary must be 200 characters or fewer" },
+    { "code": 6008, "name": "SummaryEmpty", "msg": "Evidence summary cannot be empty" },
+    { "code": 6009, "name": "UnitTooLong", "msg": "Unit must be 10 characters or fewer" },
+    { "code": 6010, "name": "InvalidTimestamp", "msg": "Event timestamp must be a positive Unix timestamp" },
+    { "code": 6011, "name": "EvidenceCountOverflow", "msg": "Evidence count overflow" },
+    { "code": 6012, "name": "Unauthorized", "msg": "Only the farm owner can perform this action" },
+    { "code": 6013, "name": "InvalidSequence", "msg": "Sequence number must equal current evidence_count + 1" }
+  ]
+}
