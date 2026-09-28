@@ -4,4 +4,4 @@ Agricultural evidence trust layer on **Solana** (Devnet) — farms, immutable ev
 
 ## SuperteamVN submission
 
-See **[`https://github.com/openagrix/OpenAgri-Living-Matrix-Project`](OpenAgri-Living-Matrix-Project)** for the full pitch pack (2-page deck, narrative, checklist).
+See **[`OpenAgri-Living-Matrix-Project`](https://github.com/openagrix/OpenAgri-Living-Matrix-Project)** for the full pitch pack (2-page deck, narrative, checklist).
